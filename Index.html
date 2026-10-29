@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페로브스카이트 차세대 태양전지 가상 실험실</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Quiz Reward -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Three.js Library for 3D Crystal Structure View -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; }
+        .tab-btn.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+
+    <!-- Header -->
+    <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
+        <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 via-blue-500 to-indigo-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-sun text-yellow-300 animate-spin-slow"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        페로브스카이트 <span class="text-blue-400">디지털 가상 실험실</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">차세대 광발전 신소재 및 PN접합 메커니즘 탐구</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-bold px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                    고교 탐구 가상 모듈
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
+
+        <!-- Tab Controls -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+            <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn active py-3 px-3 rounded-xl font-bold text-xs md:text-sm transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-gem text-blue-400"></i> 1. 핵심 개요 & 특징
+            </button>
+            <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn py-3 px-3 rounded-xl font-bold text-xs md:text-sm text-slate-400 hover:text-slate-200 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-bolt text-amber-400"></i> 2. PN 접합과 내부 전계
+            </button>
+            <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn py-3 px-3 rounded-xl font-bold text-xs md:text-sm text-slate-400 hover:text-slate-200 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-sliders text-emerald-400"></i> 3. 광발전 수치 시뮬레이션
+            </button>
+            <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn py-3 px-3 rounded-xl font-bold text-xs md:text-sm text-slate-400 hover:text-slate-200 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-award text-purple-400"></i> 4. 개념 검증 퀴즈
+            </button>
+        </div>
+
+        <!-- ================= TAB 1: 핵심 개요 & 특징 ================= -->
+        <section id="tab1" class="tab-content block space-y-6">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-blue-950/50 to-slate-900 border border-blue-500/30 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-blue-400 pointer-events-none">
+                    <i class="fa-solid fa-atom text-[200px]"></i>
+                </div>
+                <div class="relative z-10 max-w-3xl space-y-3">
+                    <span class="px-3 py-1 bg-blue-500/20 text-blue-300 font-bold text-xs rounded-full border border-blue-500/30 inline-block">
+                        💡 차세대 광전 변환 신소재
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-black text-white leading-tight">
+                        페로브스카이트(Perovskite) 태양전지란?
+                    </h2>
+                    <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                        페로브스카이트는 <strong class="text-yellow-300">ABX₃ 결정 구조</strong>를 가진 광흡수 물질입니다. 
+                        빛 에너지를 흡수하여 <strong class="text-cyan-300 font-bold">전자(Electron, -)</strong>와 <strong class="text-rose-300 font-bold">정공(Hole, +)</strong>을 효율적으로 생성하며, 
+                        저렴한 용액 공정과 높은 효율로 실리콘을 대체할 차세대 태양전지 핵심 소재입니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 3D Crystal Structure Viewer Interactive Section -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-xl">
+                <div class="flex flex-wrap justify-between items-center gap-3">
+                    <div>
+                        <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">3D Crystal Structure Interactive View</span>
+                        <h3 class="text-lg md:text-xl font-extrabold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-cube text-indigo-400"></i> 페로브스카이트 (ABX₃) 3D 입체 결정 구조
+                        </h3>
+                    </div>
+                    <div class="text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-hand-pointer text-blue-400 animate-pulse"></i> 드래그하여 회전 / 스크롤로 확대
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <!-- 3D Canvas View (2 cols) -->
+                    <div class="lg:col-span-2 relative min-h-[360px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center">
+                        <canvas id="crystal-3d-canvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
+                        <!-- Floating legend overlay on canvas -->
+                        <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur border border-slate-800 p-2.5 rounded-xl text-[11px] space-y-1 text-slate-300">
+                            <div class="flex items-center gap-2 font-bold">
+                                <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
+                                <span class="text-emerald-300">A (유기/무기 양이온):</span> 중심 위치 (Cs⁺, MA⁺)
+                            </div>
+                            <div class="flex items-center gap-2 font-bold">
+                                <span class="w-3 h-3 rounded-full bg-slate-200 inline-block"></span>
+                                <span class="text-slate-200">B (금속 양이온):</span> 꼭짓점 위치 (Pb²⁺, Sn²⁺)
+                            </div>
+                            <div class="flex items-center gap-2 font-bold">
+                                <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+                                <span class="text-rose-300">X (할로겐 음이온):</span> 모서리 중심 (I⁻, Br⁻)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Crystal Info & Controls (1 col) -->
+                    <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-sm text-slate-200 border-b border-slate-800 pb-2">원자 구성 요소 상세</h4>
+                            <div class="space-y-2 text-xs">
+                                <div class="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30">
+                                    <span class="font-bold text-emerald-300">A 양이온 (녹색 구체)</span>
+                                    <p class="text-slate-400 text-[11px] mt-0.5">단위격자 중앙에 위치하여 전체 수직 구성을 안정화합니다.</p>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-700">
+                                    <span class="font-bold text-slate-200">B 금속 양이온 (은색 구체)</span>
+                                    <p class="text-slate-400 text-[11px] mt-0.5">6개의 X 음이온과 결합하여 [BX₆] 팔면체 구조 중심을 형성합니다.</p>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-rose-950/40 border border-rose-500/30">
+                                    <span class="font-bold text-rose-300">X 할로겐 음이온 (붉은색 구체)</span>
+                                    <p class="text-slate-400 text-[11px] mt-0.5">B 양이온 주변에 배치되어 에너지를 흡수하는 밴드갭 크기를 결정합니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs">
+                            <button onclick="toggle3DRotation()" id="btn-3d-rotate" class="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition flex items-center gap-1.5 w-full justify-center">
+                                <i class="fa-solid fa-arrows-rotate"></i> 자동 회전 토글
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4대 핵심어 카드 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Card 1: Electron -->
+                <div onclick="openKeywordModal(1)" class="bg-slate-900 border border-slate-800 hover:border-cyan-500/80 p-5 rounded-2xl space-y-3 cursor-pointer transition transform hover:-translate-y-1 shadow-lg group">
+                    <div class="flex justify-between items-center">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/30 flex items-center justify-center font-black text-xl group-hover:scale-110 transition">
+                            -
+                        </div>
+                        <span class="text-[10px] text-cyan-400 bg-cyan-950/60 border border-cyan-800 px-2 py-0.5 rounded-full font-bold">클릭하여 열기 🔍</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-white flex items-center gap-1.5">
+                            1. 자유 전자 (-)
+                        </h3>
+                        <p class="text-xs text-slate-400 leading-relaxed mt-1">
+                            빛을 받아 페로브스카이트 내부에서 뛰쳐나온 음(-)의 에너지를 띤 입자입니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Hole -->
+                <div onclick="openKeywordModal(2)" class="bg-slate-900 border border-slate-800 hover:border-rose-500/80 p-5 rounded-2xl space-y-3 cursor-pointer transition transform hover:-translate-y-1 shadow-lg group">
+                    <div class="flex justify-between items-center">
+                        <div class="w-10 h-10 rounded-xl bg-rose-950 text-rose-400 border border-rose-500/30 flex items-center justify-center font-black text-xl group-hover:scale-110 transition">
+                            +
+                        </div>
+                        <span class="text-[10px] text-rose-400 bg-rose-950/60 border border-rose-800 px-2 py-0.5 rounded-full font-bold">클릭하여 열기 🔍</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-white flex items-center gap-1.5">
+                            2. 정공 / 양공 (+)
+                        </h3>
+                        <p class="text-xs text-slate-400 leading-relaxed mt-1">
+                            전자가 빠져나간 '빈자리'로, 마치 양(+)의 전하가 움직이는 것처럼 행동합니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Electric Field -->
+                <div onclick="openKeywordModal(3)" class="bg-slate-900 border border-slate-800 hover:border-amber-500/80 p-5 rounded-2xl space-y-3 cursor-pointer transition transform hover:-translate-y-1 shadow-lg group">
+                    <div class="flex justify-between items-center">
+                        <div class="w-10 h-10 rounded-xl bg-amber-950 text-amber-400 border border-amber-500/30 flex items-center justify-center font-black text-lg group-hover:scale-110 transition">
+                            ⚡
+                        </div>
+                        <span class="text-[10px] text-amber-400 bg-amber-950/60 border border-amber-800 px-2 py-0.5 rounded-full font-bold">클릭하여 열기 🔍</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-white flex items-center gap-1.5">
+                            3. 내부 전계
+                        </h3>
+                        <p class="text-xs text-slate-400 leading-relaxed mt-1">
+                            전자(-)와 정공(+)을 반대 방향으로 밀어내는 '태양전지 내부 미끄럼틀'입니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Tandem -->
+                <div onclick="openKeywordModal(4)" class="bg-slate-900 border border-slate-800 hover:border-purple-500/80 p-5 rounded-2xl space-y-3 cursor-pointer transition transform hover:-translate-y-1 shadow-lg group">
+                    <div class="flex justify-between items-center">
+                        <div class="w-10 h-10 rounded-xl bg-purple-950 text-purple-400 border border-purple-500/30 flex items-center justify-center font-black text-lg group-hover:scale-110 transition">
+                            🥞
+                        </div>
+                        <span class="text-[10px] text-purple-400 bg-purple-950/60 border border-purple-800 px-2 py-0.5 rounded-full font-bold">클릭하여 열기 🔍</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-white flex items-center gap-1.5">
+                            4. 텐덤(Tandem) 구조
+                        </h3>
+                        <p class="text-xs text-slate-400 leading-relaxed mt-1">
+                            페로브스카이트와 실리콘을 2층으로 쌓아 태양광을 2배로 알차게 흡수하는 구조입니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 실리콘 vs 페로브스카이트 비교 -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-code-compare text-blue-400"></i> 실리콘 태양전지 vs 페로브스카이트 비교
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-bold">기존 실리콘 (Si)</span>
+                        <ul class="space-y-1.5 text-slate-400 list-disc list-inside">
+                            <li>1,000°C 이상의 고온 정제 공정 필요 (높은 제조 원가)</li>
+                            <li>두껍고 두꺼운 결정형 기판 (무겁고 단단함)</li>
+                            <li>이론적 효율 한계 (단일 접합 ~29%)</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-xl bg-blue-950/30 border border-blue-500/30 space-y-2">
+                        <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-bold">차세대 페로브스카이트</span>
+                        <ul class="space-y-1.5 text-slate-200 list-disc list-inside">
+                            <li>100°C 이하 저온 용액 공정 (인쇄 및 페인팅 가능, 저비용)</li>
+                            <li>얇은 박막 형성 가능 (유연하고 가벼움, 창문/의류 부착)</li>
+                            <li>텐덤 구조 적용 시 이론 효율 40% 이상 가능</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: PN 접합과 내부 전계 ================= -->
+        <section id="tab2" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-4">
+                <span class="px-3 py-1 bg-amber-500/20 text-amber-300 font-bold text-xs rounded-full border border-amber-500/30 inline-block">
+                    ⚡ 반도체 동작 원리
+                </span>
+                <h2 class="text-xl md:text-2xl font-black text-white">
+                    PN 접합과 p-i-n 구조의 내부 전계(Built-in Electric Field)
+                </h2>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    페로브스카이트 태양전지는 주로 <strong class="text-rose-400">p형 수송층(HTL)</strong> - <strong class="text-amber-300">페로브스카이트 흡수층(i)</strong> - <strong class="text-cyan-400">n형 수송층(ETL)</strong>의 <strong>p-i-n 구조</strong>를 이룹니다. 
+                    p형과 n형 수송층의 일함수(Work Function) 차이에 의해 내부 전계가 형성되며, 이 내부 전계가 빛에 의해 생성된 전자와 정공을 반대 방향으로 끌어당겨 구동시킵니다.
+                </p>
+            </div>
+
+            <!-- Layer-by-Layer visual breakdown -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-900 border border-rose-500/40 p-5 rounded-2xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black px-2.5 py-1 rounded bg-rose-950 text-rose-300 border border-rose-800">p-층 (HTL)</span>
+                        <span class="text-xl font-bold text-rose-400">+ (정공)</span>
+                    </div>
+                    <h3 class="font-bold text-white text-sm md:text-base">정공 수송층 (HTL)</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        생성된 정공(+)만을 선택적으로 수집하는 층입니다. 양극(Anode)으로 정공을 전달합니다.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900 border border-amber-500/40 p-5 rounded-2xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black px-2.5 py-1 rounded bg-amber-950 text-amber-300 border border-amber-800">i-층 (Intrinsic)</span>
+                        <span class="text-lg">☀️ 광흡수</span>
+                    </div>
+                    <h3 class="font-bold text-white text-sm md:text-base">페로브스카이트 흡수층</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        빛(광자)을 받아 전자(-)와 정공(+) 입자 쌍을 생성하는 활성 영역입니다.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900 border border-cyan-500/40 p-5 rounded-2xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black px-2.5 py-1 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">n-층 (ETL)</span>
+                        <span class="text-xl font-bold text-cyan-400">- (전자)</span>
+                    </div>
+                    <h3 class="font-bold text-white text-sm md:text-base">전자 수송층 (ETL)</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        생성된 전자(-)만을 선택적으로 수집하는 층입니다. 음극(Cathode)으로 전자를 전달합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Field Concept Graphic -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h4 class="text-sm font-bold text-slate-200">내부 전계에 의한 전하 분리 및 이동 흐름</h4>
+                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-center">
+                    <div class="p-4 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-bold w-full md:w-1/4">
+                        HTL (정공 수집)<br>
+                        <span class="text-xl font-black">🔴 정공(+) 👈</span>
+                    </div>
+
+                    <div class="flex-1 space-y-1">
+                        <div class="text-amber-400 font-extrabold text-sm md:text-base">
+                            ⚡ 내부 전계 (Built-in Field) 방향 ⚡
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            p-i-n 접합 전위차에 의해 전자는 ETL로, 정공은 HTL로 강제 이동하여 기전력이 발생합니다.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 text-xs font-bold w-full md:w-1/4">
+                        ETL (전자 수집)<br>
+                        <span class="text-xl font-black">👉 전자(-) 🔵</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: SIMULATION ================= -->
+        <section id="tab3" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Simulation Controls (1 Column) -->
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-3xl space-y-5 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-4">
+                            <i class="fa-solid fa-sliders text-emerald-400"></i> 환경 조건 및 매개변수
+                        </h2>
+
+                        <div class="space-y-4 text-xs">
+                            <!-- Sunlight Intensity -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between font-bold">
+                                    <label class="text-slate-300">☀️ 태양 조도 (Solar Irradiance)</label>
+                                    <span id="val-light" class="text-amber-400">1000 W/m²</span>
+                                </div>
+                                <input type="range" id="input-light" min="0" max="1500" step="50" value="1000" oninput="updateSimControls()" class="w-full bg-slate-800 rounded-lg h-2 appearance-none">
+                            </div>
+
+                            <!-- Temperature -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between font-bold">
+                                    <label class="text-slate-300">🌡️ 셀 온도 (Temperature)</label>
+                                    <span id="val-temp" class="text-rose-400">25 °C</span>
+                                </div>
+                                <input type="range" id="input-temp" min="0" max="85" step="1" value="25" oninput="updateSimControls()" class="w-full bg-slate-800 rounded-lg h-2 appearance-none">
+                            </div>
+
+                            <!-- Layer Thickness -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between font-bold">
+                                    <label class="text-slate-300">📏 페로브스카이트 두께</label>
+                                    <span id="val-thick" class="text-blue-400">400 nm</span>
+                                </div>
+                                <input type="range" id="input-thick" min="100" max="800" step="50" value="400" oninput="updateSimControls()" class="w-full bg-slate-800 rounded-lg h-2 appearance-none">
+                            </div>
+
+                            <!-- Cell Structure Type -->
+                            <div class="space-y-1.5 pt-2">
+                                <label class="font-bold text-slate-300 block">🥞 태양전지 구조 선택</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="setCellType('single')" id="btn-single" class="py-2 rounded-xl bg-blue-600 text-white font-bold border border-blue-500">
+                                        단일 페로브스카이트
+                                    </button>
+                                    <button onclick="setCellType('tandem')" id="btn-tandem" class="py-2 rounded-xl bg-slate-800 text-slate-400 font-bold border border-slate-700 hover:text-white">
+                                        페로브스카이트-실리콘 텐덤
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calculated Output Display -->
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+                        <div class="text-xs font-bold text-slate-400">실시간 광발전계 계산 결과</div>
+                        <div class="grid grid-cols-2 gap-2 text-center">
+                            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 font-bold">광전 변환 효율 (PCE)</div>
+                                <div id="disp-eff" class="text-lg font-black text-emerald-400">24.2 %</div>
+                            </div>
+                            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 font-bold">전기 발전량 (Output)</div>
+                                <div id="disp-power" class="text-lg font-black text-yellow-400">242.0 W</div>
+                            </div>
+                        </div>
+                        <div id="optimal-alert" class="hidden text-[11px] bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 p-2 rounded-lg font-bold text-center animate-pulse">
+                            🌟 최적 발전 조건 달성! (최대 효율 부근)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Canvas Area (2 Columns) -->
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-5 rounded-3xl flex flex-col space-y-3">
+                    <div class="flex justify-between items-center text-xs">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center gap-1 font-bold text-yellow-300">🟡 광자 (Photon)</span>
+                            <span class="flex items-center gap-1 font-bold text-cyan-400">🔵 전자 (-)</span>
+                            <span class="flex items-center gap-1 font-bold text-rose-400">🔴 정공 (+)</span>
+                        </div>
+                        <div class="font-mono text-slate-400">
+                            생성 입자: <span id="sim-particle-count" class="text-blue-400 font-bold">0</span>개
+                        </div>
+                    </div>
+
+                    <!-- Canvas -->
+                    <div class="relative flex-grow min-h-[320px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800">
+                        <canvas id="main-sim-canvas" class="w-full h-full block"></canvas>
+                    </div>
+
+                    <div class="text-[11px] text-slate-400 text-center">
+                        * 광자 입자가 흡수층에 도달하면 전자(-)와 정공(+) 쌍으로 분리되어 각각 ETL(우)과 HTL(좌)로 이동합니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: QUIZ ================= -->
+        <section id="tab4" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-6">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <div>
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Concept Verification</span>
+                        <h2 class="text-xl md:text-2xl font-black text-white mt-1">고교 수준 개념 검증 퀴즈</h2>
+                    </div>
+                    <div id="quiz-score-badge" class="px-4 py-1.5 bg-purple-950 text-purple-300 border border-purple-800 rounded-full text-xs font-bold">
+                        점수: 0 / 4
+                    </div>
+                </div>
+
+                <!-- Questions List -->
+                <div class="space-y-4 text-xs md:text-sm">
+                    <!-- Question 1 -->
+                    <div class="p-4 md:p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                        <p class="font-bold text-white leading-relaxed">
+                            Q1. 페로브스카이트 결정 구조의 일반적인 화학식 표기로 올바른 것은?
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkQuiz(1, 'A')" class="q1-btn p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-left transition font-medium border border-slate-800">① ABX₃</button>
+                            <button onclick="checkQuiz(1, 'B')" class="q1-btn p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-left transition font-medium border border-slate-800">② SiO₂</button>
+                        </div>
+                        <p id="q1-fb" class="hidden font-bold mt-2 text-xs"></p>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="p-4 md:p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                        <p class="font-bold text-white leading-relaxed">
+                            Q2. 페로브스카이트 태양전지의 p-i-n 구조에서, 광흡수층(i층)에서 생성된 전자를 선택적으로 수집하는 층(ETL)은 어디로 전자를 전달하는가?
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkQuiz(2, 'A')" class="q2-btn p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-left transition font-medium border border-slate-800">① 음극 (Cathode)</button>
+                            <button onclick="checkQuiz(2, 'B')" class="q2-btn p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-left transition font-medium border border-slate-800">② 양극 (Anode)</button>
+                        </div>
+                        <p id="q2-fb" class="hidden font-bold mt-2 text-xs"></p>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="p-4 md:p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                        <p class="font-bold text-white leading-relaxed">
+                            Q3. 태양전지 내부에서 생성된 전자(-)와 정공(+)을 재결합하지 않고 각 수송층으로 외부 힘 없이 빠르게 분리시키는 구동력은?
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkQuiz(3, 'A')" class="q3-btn p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-left transition font-medium border border-slate-800">① 내부 전계 (Built-in Field)</button>
+                            <button onclick="checkQuiz(3, 'B')" class="q3-btn p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-left transition font-medium border border-slate-800">② 외부 대류 열 전달</button>
+                        </div>
+                        <p id="q3-fb" class="hidden font-bold mt-2 text-xs"></p>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="p-4 md:p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                        <p class="font-bold text-white leading-relaxed">
+                            Q4. 기존 실리콘 태양전지 위에 페로브스카이트 태양전지를 쌓아 흡수 파장 대역을 넓히고 효율 한계를 극복하는 차세대 구조는?
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="checkQuiz(4, 'A')" class="q4-btn p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-left transition font-medium border border-slate-800">① 페로브스카이트-실리콘 텐덤(Tandem) 셀</button>
+                            <button onclick="checkQuiz(4, 'B')" class="q4-btn p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-left transition font-medium border border-slate-800">② 단일 접합 실리콘 셀</button>
+                        </div>
+                        <p id="q4-fb" class="hidden font-bold mt-2 text-xs"></p>
+                    </div>
+                </div>
+
+                <!-- Reward Banner Container -->
+                <div id="reward-container" class="hidden p-6 rounded-3xl bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-blue-500/20 border border-amber-500/50 text-center space-y-4">
+                    <div class="inline-block p-3 bg-amber-500/20 rounded-2xl border border-amber-400/40 text-amber-300 text-3xl">
+                        🏆
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-white">축하합니다! 만점을 달성하셨습니다.</h3>
+                        <p class="text-xs text-amber-200 mt-1">페로브스카이트 차세대 태양전지의 동작 원리와 물리적 메커니즘을 완벽히 이해하셨습니다.</p>
+                    </div>
+                    <div class="inline-block px-6 py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-xl text-sm shadow-xl shadow-amber-500/20">
+                        페로브스카이트 차세대 연구원 인증 수여
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- KEYWORD DETAIL MODAL POPUP -->
+    <div id="keyword-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 max-w-lg w-full rounded-3xl p-6 shadow-2xl space-y-5 relative animate-in fade-in zoom-in duration-200">
+            <!-- Close Button -->
+            <button onclick="closeKeywordModal()" class="absolute top-4 right-4 w-9 h-9 bg-slate-800 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white flex items-center justify-center text-lg transition">
+                ✕
+            </button>
+
+            <!-- Modal Header -->
+            <div class="flex items-center gap-3">
+                <div id="modal-icon-badge" class="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-2xl shadow-lg">
+                    -
+                </div>
+                <div>
+                    <span id="modal-sub-tag" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border">
+                        핵심 개념 상세 가이드
+                    </span>
+                    <h3 id="modal-title" class="text-xl font-black text-white mt-1">
+                        자유 전자 (-)
+                    </h3>
+                </div>
+            </div>
+
+            <!-- Visual Graphic Illustration Container -->
+            <div id="modal-image-container" class="w-full h-44 rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden flex items-center justify-center relative p-4">
+                <!-- SVG/Graphic Illustration inner content dynamically injected -->
+            </div>
+
+            <!-- Modal Detailed Text -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">💡 한눈에 딱 이해하는 핵심 가이드</h4>
+                <p id="modal-desc" class="text-xs md:text-sm text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-2xl border border-slate-800/80">
+                    상세 설명이 들어갑니다.
+                </p>
+            </div>
+
+            <!-- Close Action Button -->
+            <button onclick="closeKeywordModal()" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs md:text-sm transition shadow-lg shadow-blue-500/20">
+                확인했습니다 (창 닫기)
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900/50 border-t border-slate-800 py-4 px-4 text-center text-xs text-slate-500">
+        고등학교 탐구 학습용 인터랙티브 모듈 | 페로브스카이트 가상 디지털 실험실
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // TAB SWITCHING
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn py-3 px-3 rounded-xl font-bold text-xs md:text-sm text-slate-400 hover:text-slate-200 transition-all flex items-center justify-center gap-2';
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.className = 'tab-btn active py-3 px-3 rounded-xl font-bold text-xs md:text-sm transition-all flex items-center justify-center gap-2';
+
+            if (tabId === 'tab1') {
+                setTimeout(init3DCrystal, 100);
+            } else if (tabId === 'tab3') {
+                setTimeout(initSimCanvas, 100);
+            }
+        }
+
+        // ================= 3D CRYSTAL STRUCTURE (THREE.JS) =================
+        let crystalScene, crystalCamera, crystalRenderer;
+        let crystalGroup;
+        let isAutoRotate3D = true;
+        let isDragging3D = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        function init3DCrystal() {
+            const container = document.getElementById('crystal-3d-canvas');
+            if (!container) return;
+
+            const width = container.parentElement.clientWidth;
+            const height = container.parentElement.clientHeight || 360;
+
+            // Scene setup
+            crystalScene = new THREE.Scene();
+            crystalScene.background = new THREE.Color(0x020617); // slate-950
+
+            // Camera setup
+            crystalCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            crystalCamera.position.set(6, 5, 8);
+            crystalCamera.lookAt(0, 0, 0);
+
+            // Renderer setup
+            if (!crystalRenderer) {
+                crystalRenderer = new THREE.WebGLRenderer({ canvas: container, antialias: true });
+            }
+            crystalRenderer.setSize(width, height);
+            crystalRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            crystalScene.add(ambientLight);
+
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight1.position.set(10, 15, 10);
+            crystalScene.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x38bdf8, 0.5);
+            dirLight2.position.set(-10, -10, -10);
+            crystalScene.add(dirLight2);
+
+            // Build Unit Cell Group
+            if (crystalGroup) crystalScene.remove(crystalGroup);
+            crystalGroup = new THREE.Group();
+
+            const unitSize = 3.0;
+            const half = unitSize / 2;
+
+            // Geometries & Materials
+            const aAtomGeo = new THREE.SphereGeometry(0.5, 32, 32);
+            aAtomMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.2, metalness: 0.5 }); // Emerald (A Cation)
+
+            const bAtomGeo = new THREE.SphereGeometry(0.38, 32, 32);
+            bAtomMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.1, metalness: 0.8 }); // Silver (B Metal Cation)
+
+            const xAtomGeo = new THREE.SphereGeometry(0.28, 32, 32);
+            xAtomMat = new THREE.MeshStandardMaterial({ color: 0xf43f5e, roughness: 0.3, metalness: 0.2 }); // Rose (X Halide)
+
+            const bondMat = new THREE.MeshBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.6 });
+
+            // 1. Center A Cation (0, 0, 0)
+            const aAtom = new THREE.Mesh(aAtomGeo, aAtomMat);
+            aAtom.position.set(0, 0, 0);
+            crystalGroup.add(aAtom);
+
+            // 2. Corner B Cations (8 corners)
+            const corners = [
+                [-half, -half, -half], [half, -half, -half], [-half, half, -half], [half, half, -half],
+                [-half, -half, half],  [half, -half, half],  [-half, half, half],  [half, half, half]
+            ];
+
+            corners.forEach(pos => {
+                const bAtom = new THREE.Mesh(bAtomGeo, bAtomMat);
+                bAtom.position.set(...pos);
+                crystalGroup.add(bAtom);
+            });
+
+            // 3. X Anions (12 edge centers)
+            const edges = [
+                // Top/Bottom edges along X
+                [0, -half, -half], [0, half, -half], [0, -half, half], [0, half, half],
+                // Edges along Y
+                [-half, 0, -half], [half, 0, -half], [-half, 0, half], [half, 0, half],
+                // Edges along Z
+                [-half, -half, 0], [half, -half, 0], [-half, half, 0], [half, half, 0]
+            ];
+
+            edges.forEach(pos => {
+                const xAtom = new THREE.Mesh(xAtomGeo, xAtomMat);
+                xAtom.position.set(...pos);
+                crystalGroup.add(xAtom);
+            });
+
+            // 4. Cube Frame Wireframe
+            const boxGeo = new THREE.BoxGeometry(unitSize, unitSize, unitSize);
+            const wireGeo = new THREE.WireframeGeometry(boxGeo);
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x475569, linewidth: 2 });
+            const boxWire = new THREE.LineSegments(wireGeo, lineMat);
+            crystalGroup.add(boxWire);
+
+            // 5. BX6 Octahedron Visual Lines (connecting center B atom to surround X)
+            corners.forEach(bPos => {
+                edges.forEach(xPos => {
+                    const dist = Math.hypot(bPos[0]-xPos[0], bPos[1]-xPos[1], bPos[2]-xPos[2]);
+                    if (Math.abs(dist - half) < 0.1) {
+                        const points = [new THREE.Vector3(...bPos), new THREE.Vector3(...xPos)];
+                        const octGeo = new THREE.BufferGeometry().setFromPoints(points);
+                        const octLine = new THREE.Line(octGeo, new THREE.LineBasicMaterial({ color: 0xf43f5e, transparent: true, opacity: 0.35 }));
+                        crystalGroup.add(octLine);
+                    }
+                });
+            });
+
+            crystalScene.add(crystalGroup);
+
+            // Mouse Interaction handling
+            container.onmousedown = (e) => {
+                isDragging3D = true;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            };
+
+            window.onmouseup = () => { isDragging3D = false; };
+
+            container.onmousemove = (e) => {
+                if (!isDragging3D) return;
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+
+                crystalGroup.rotation.y += deltaX * 0.01;
+                crystalGroup.rotation.x += deltaY * 0.01;
+
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            };
+
+            animate3DCrystal();
+        }
+
+        function toggle3DRotation() {
+            isAutoRotate3D = !isAutoRotate3D;
+            const btn = document.getElementById('btn-3d-rotate');
+            btn.innerHTML = isAutoRotate3D 
+                ? `<i class="fa-solid fa-arrows-rotate"></i> 자동 회전 토글`
+                : `<i class="fa-solid fa-pause"></i> 정지 상태`;
+        }
+
+        function animate3DCrystal() {
+            if (!crystalRenderer || !crystalScene || !crystalCamera) return;
+
+            if (isAutoRotate3D && !isDragging3D && crystalGroup) {
+                crystalGroup.rotation.y += 0.005;
+                crystalGroup.rotation.x += 0.002;
+            }
+
+            crystalRenderer.render(crystalScene, crystalCamera);
+            requestAnimationFrame(animate3DCrystal);
+        }
+
+        // SIMULATION PARAMETERS STATE
+        let simState = {
+            light: 1000,
+            temp: 25,
+            thickness: 400,
+            cellType: 'single' // 'single' or 'tandem'
+        };
+
+        function setCellType(type) {
+            simState.cellType = type;
+            const btnSingle = document.getElementById('btn-single');
+            const btnTandem = document.getElementById('btn-tandem');
+
+            if (type === 'single') {
+                btnSingle.className = "py-2 rounded-xl bg-blue-600 text-white font-bold border border-blue-500";
+                btnTandem.className = "py-2 rounded-xl bg-slate-800 text-slate-400 font-bold border border-slate-700 hover:text-white";
+            } else {
+                btnTandem.className = "py-2 rounded-xl bg-purple-600 text-white font-bold border border-purple-500";
+                btnSingle.className = "py-2 rounded-xl bg-slate-800 text-slate-400 font-bold border border-slate-700 hover:text-white";
+            }
+            updateSimControls();
+        }
+
+        function updateSimControls() {
+            simState.light = parseFloat(document.getElementById('input-light').value);
+            simState.temp = parseFloat(document.getElementById('input-temp').value);
+            simState.thickness = parseFloat(document.getElementById('input-thick').value);
+
+            document.getElementById('val-light').innerText = `${simState.light} W/m²`;
+            document.getElementById('val-temp').innerText = `${simState.temp} °C`;
+            document.getElementById('val-thick').innerText = `${simState.thickness} nm`;
+
+            // Calculate Efficiency (PCE %) Formula
+            // Base efficiency: Single ~22%, Tandem ~32%
+            let baseEff = (simState.cellType === 'single') ? 24.0 : 33.0;
+
+            // Thickness penalty (Optimal ~400nm)
+            let thickFactor = 1 - Math.abs(simState.thickness - 400) / 1200;
+
+            // Temperature penalty (-0.35% rel per deg C above 25)
+            let tempFactor = 1 - (simState.temp - 25) * 0.0035;
+
+            // Light Intensity factor
+            let lightFactor = Math.min(1.05, Math.sqrt(simState.light / 1000));
+
+            let currentEff = baseEff * thickFactor * tempFactor * lightFactor;
+            currentEff = Math.max(0, Math.min(45, currentEff));
+
+            // Power output = Light (W/m2) * Efficiency * (Standard area multiplier)
+            let powerOutput = (simState.light) * (currentEff / 100);
+
+            document.getElementById('disp-eff').innerText = `${currentEff.toFixed(1)} %`;
+            document.getElementById('disp-power').innerText = `${powerOutput.toFixed(1)} W`;
+
+            // Check optimal conditions
+            const isOptimal = (simState.light >= 900 && simState.temp <= 30 && simState.thickness >= 350 && simState.thickness <= 450);
+            const alertBox = document.getElementById('optimal-alert');
+            if (isOptimal) {
+                alertBox.classList.remove('hidden');
+            } else {
+                alertBox.classList.add('hidden');
+            }
+        }
+
+        // CANVAS SIMULATION LOGIC
+        let canvas, ctx;
+        let animFrameId = null;
+        let photons = [];
+        let particles = [];
+
+        function initSimCanvas() {
+            canvas = document.getElementById('main-sim-canvas');
+            if (!canvas) return;
+            ctx = canvas.getContext('2d');
+
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+
+            photons = [];
+            particles = [];
+
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            renderCanvas();
+        }
+
+        function renderCanvas() {
+            if (!ctx || !canvas) return;
+
+            const w = canvas.width;
+            const h = canvas.height;
+            const layerW = w / 3;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw Layer Backgrounds
+            // Left: HTL (p-layer, holes +)
+            ctx.fillStyle = "rgba(244, 63, 94, 0.12)";
+            ctx.fillRect(0, 0, layerW, h);
+            ctx.fillStyle = "#f43f5e";
+            ctx.font = "bold 12px Pretendard";
+            ctx.fillText("HTL (정공 수송층 +)", 12, 25);
+
+            // Center: Perovskite Absorber
+            ctx.fillStyle = (simState.cellType === 'tandem') ? "rgba(168, 85, 247, 0.15)" : "rgba(234, 179, 8, 0.15)";
+            ctx.fillRect(layerW, 0, layerW, h);
+            ctx.fillStyle = (simState.cellType === 'tandem') ? "#c084fc" : "#eab308";
+            ctx.fillText((simState.cellType === 'tandem') ? "페로브스카이트/실리콘 텐덤 흡수층" : "페로브스카이트 광흡수층 (i)", layerW + 12, 25);
+
+            // Right: ETL (n-layer, electrons -)
+            ctx.fillStyle = "rgba(56, 189, 248, 0.12)";
+            ctx.fillRect(layerW * 2, 0, layerW, h);
+            ctx.fillStyle = "#38bdf8";
+            ctx.fillText("ETL (전자 수송층 -)", layerW * 2 + 12, 25);
+
+            // Spawn Photons based on Light Intensity
+            const spawnRate = (simState.light / 1000) * 0.4;
+            if (Math.random() < spawnRate) {
+                photons.push({
+                    x: layerW + Math.random() * layerW,
+                    y: 0,
+                    speed: 2.5 + Math.random() * 2
+                });
+            }
+
+            // Update & Render Photons
+            for (let i = photons.length - 1; i >= 0; i--) {
+                let p = photons[i];
+                p.y += p.speed;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = "#fde047";
+                ctx.fill();
+
+                // Convert Photon to (e-, h+) Pair at middle of layer
+                if (p.y >= h * 0.4 + Math.random() * (h * 0.2)) {
+                    // Electron (-) moves RIGHT -> ETL
+                    particles.push({ type: 'e', x: p.x, y: p.y, vx: 1.8 + Math.random() * 1.2 });
+                    // Hole (+) moves LEFT -> HTL
+                    particles.push({ type: 'h', x: p.x, y: p.y, vx: -(1.8 + Math.random() * 1.2) });
+
+                    photons.splice(i, 1);
+                } else if (p.y > h) {
+                    photons.splice(i, 1);
+                }
+            }
+
+            // Update & Render Generated Particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let part = particles[i];
+                part.x += part.vx;
+
+                if (part.type === 'e') {
+                    // Electron (-) Cyan
+                    ctx.beginPath();
+                    ctx.arc(part.x, part.y, 8, 0, Math.PI * 2);
+                    ctx.fillStyle = "#38bdf8";
+                    ctx.fill();
+
+                    ctx.fillStyle = "#0f172a";
+                    ctx.font = "bold 10px Pretendard";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("-", part.x, part.y);
+
+                    if (part.x >= w) particles.splice(i, 1);
+                } else {
+                    // Hole (+) Rose
+                    ctx.beginPath();
+                    ctx.arc(part.x, part.y, 8, 0, Math.PI * 2);
+                    ctx.fillStyle = "#f43f5e";
+                    ctx.fill();
+
+                    ctx.fillStyle = "#ffffff";
+                    ctx.font = "bold 10px Pretendard";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("+", part.x, part.y);
+
+                    if (part.x <= 0) particles.splice(i, 1);
+                }
+            }
+
+            document.getElementById('sim-particle-count').innerText = particles.length;
+
+            animFrameId = requestAnimationFrame(renderCanvas);
+        }
+
+        window.addEventListener('resize', () => {
+            if (document.getElementById('tab3').classList.contains('hidden') === false) {
+                initSimCanvas();
+            }
+        });
+
+        // QUIZ SYSTEM LOGIC
+        const quizAnswers = { 1: 'A', 2: 'A', 3: 'A', 4: 'A' };
+        let quizState = { 1: false, 2: false, 3: false, 4: false };
+
+        function checkQuiz(qNum, selected) {
+            const fb = document.getElementById(`q${qNum}-fb`);
+            fb.classList.remove('hidden');
+
+            if (selected === quizAnswers[qNum]) {
+                quizState[qNum] = true;
+                fb.className = "text-xs font-bold mt-2 text-emerald-400";
+                fb.innerText = "✓ 정답입니다! 개념을 올바르게 이해하셨습니다.";
+            } else {
+                quizState[qNum] = false;
+                fb.className = "text-xs font-bold mt-2 text-rose-400";
+                fb.innerText = "✕ 오답입니다. 개념 내용과 시뮬레이션을 다시 복습해보세요.";
+            }
+
+            const correctCount = Object.values(quizState).filter(Boolean).length;
+            document.getElementById('quiz-score-badge').innerText = `점수: ${correctCount} / 4`;
+
+            // Perfect Score Reward Trigger
+            if (correctCount === 4) {
+                document.getElementById('reward-container').classList.remove('hidden');
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        // Initialize simulation settings on startup
+        updateSimControls();
+
+        // Initialize 3D Crystal View on first load
+        window.addEventListener('load', () => {
+            init3DCrystal();
+        });
+
+        // ================= KEYWORD MODAL POPUP LOGIC =================
+        const modalData = {
+            1: {
+                title: "1. 자유 전자 (Electron, -)",
+                tag: "음(-)의 전하 입자",
+                tagColor: "bg-cyan-950 text-cyan-300 border-cyan-800",
+                iconBg: "bg-cyan-950 text-cyan-400 border border-cyan-500/30",
+                icon: "-",
+                graphic: `
+                    <div class="flex items-center justify-center gap-6 w-full">
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-yellow-500/20 border-2 border-yellow-400 flex items-center justify-center text-yellow-300 text-2xl animate-pulse mx-auto">☀️</div>
+                            <span class="text-[10px] text-yellow-300 font-bold mt-1 block">광자(빛) 흡수</span>
+                        </div>
+                        <div class="text-slate-500 text-xl font-bold">➔</div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center text-cyan-300 font-black text-2xl shadow-lg shadow-cyan-500/30 mx-auto animate-bounce">-</div>
+                            <span class="text-[10px] text-cyan-300 font-bold mt-1 block">자유 전자 생성!</span>
+                        </div>
+                    </div>
+                `,
+                desc: "<b>[핵심]</b> 페로브스카이트가 햇빛을 받으면 내부에 갇혀있던 전자가 에너지를 얻어 자유롭게 튀어나옵니다!<br><br>• <b>역할:</b> 음극(Cathode) 쪽으로 달려가 외부에 <b>전류(전기)</b>를 흐라게 만드는 진짜 원동력입니다.<br>• <b>쉬운 비유:</b> 빛 에너지를 먹고 신나서 밖으로 튀어나온 <b>'-' 자석 입자</b>입니다."
+            },
+            2: {
+                title: "2. 정공 / 양공 (Hole, +)",
+                tag: "양(+)의 전하 입자",
+                tagColor: "bg-rose-950 text-rose-300 border-rose-800",
+                iconBg: "bg-rose-950 text-rose-400 border border-rose-500/30",
+                icon: "+",
+                graphic: `
+                    <div class="flex items-center justify-center gap-6 w-full">
+                        <div class="text-center">
+                            <div class="w-14 h-14 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 font-bold text-lg mx-auto">-</div>
+                            <span class="text-[10px] text-slate-400 mt-1 block">전자가 빠져나감</span>
+                        </div>
+                        <div class="text-slate-500 text-xl font-bold">➔</div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-rose-500/20 border-2 border-rose-500 flex items-center justify-center text-rose-400 font-black text-2xl shadow-lg shadow-rose-500/30 mx-auto">+</div>
+                            <span class="text-[10px] text-rose-300 font-bold mt-1 block">빈자리 (정공 +) 생성</span>
+                        </div>
+                    </div>
+                `,
+                desc: "<b>[핵심]</b> 전자가 튀어나가고 남은 <b>'빈자리'</b>를 말합니다.<br><br>• <b>특징:</b> 빈자리가 생기면 옆에 있던 전자가 채워지면서, 마치 <b>'+' 입자가 반대 방향으로 이동하는 것처럼</b> 보입니다.<br>• <b>쉬운 비유:</b> 관객이 의자에서 일어나 나가면 빈 의자(+)가 남는 것처럼, 전자(-)의 반대편 양극(Anode)으로 향하는 <b>'+' 파트너</b>입니다."
+            },
+            3: {
+                title: "3. 내부 전계 (Built-in Electric Field)",
+                tag: "자연적인 내부 전기장",
+                tagColor: "bg-amber-950 text-amber-300 border-amber-800",
+                iconBg: "bg-amber-950 text-amber-400 border border-amber-500/30",
+                icon: "⚡",
+                graphic: `
+                    <div class="w-full flex items-center justify-between px-4">
+                        <div class="p-2.5 rounded-xl bg-rose-950 border border-rose-500/40 text-rose-300 text-[11px] font-bold text-center">
+                            HTL (p층)<br><span class="text-lg">🔴 +</span>
+                        </div>
+                        <div class="flex-1 px-2 text-center">
+                            <div class="text-amber-400 font-black text-xs">⚡ 미끄럼틀 (내부 전계) ⚡</div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full mt-1 overflow-hidden">
+                                <div class="bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400 h-full w-full"></div>
+                            </div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold text-center">
+                            ETL (n층)<br><span class="text-lg">🔵 -</span>
+                        </div>
+                    </div>
+                `,
+                desc: "<b>[핵심]</b> p형 수송층과 n형 수송층이 만나 자연스럽게 형성되는 <b>'전기 미끄럼틀'</b>입니다.<br><br>• <b>역할:</b> 생성된 전자(-)와 정공(+)이 다시 합쳐져 사라지지 않도록, 전자는 <b>ETL(-)</b> 쪽으로, 정공은 <b>HTL(+)</b> 쪽으로 빠르게 갈라놓습니다.<br>• <b>쉬운 비유:</b> $+$와 $-$가 끌어당기는 자석 극성에 맞춰 알아서 제 갈 길로 가게 만드는 <b>내부 교통정리 시스템</b>입니다."
+            },
+            4: {
+                title: "4. 텐덤 (Tandem) 태양전지",
+                tag: "2층 적층 차세대 구조",
+                tagColor: "bg-purple-950 text-purple-300 border-purple-800",
+                iconBg: "bg-purple-950 text-purple-400 border border-purple-500/30",
+                icon: "🥞",
+                graphic: `
+                    <div class="w-full space-y-2 max-w-xs mx-auto">
+                        <div class="p-2.5 rounded-xl bg-purple-900/60 border border-purple-400/50 text-center text-xs font-bold text-purple-200">
+                            ☀️ 상부: 페로브스카이트 (청색/파란 빛 흡수)
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-800 border border-slate-600 text-center text-xs font-bold text-slate-300">
+                            ☀️ 하부: 실리콘 (적색/붉은 빛 흡수)
+                        </div>
+                    </div>
+                `,
+                desc: "<b>[핵심]</b> 페로브스카이트와 기존 실리콘 태양전지를 2층 샌드위치처럼 겹쳐 쌓은 구조입니다.<br><br>• <b>원리:</b> 윗층 페로브스카이트는 에너지가 센 <b>청색광</b>을 흡수하고, 아래층 실리콘은 통과한 <b>적색광</b>을 흡수합니다.<br>• <b>효과:</b> 단일 전지의 한계(25%)를 넘어 <b>효율 35%~40% 이상</b>을 달성할 수 있는 꿈의 기술입니다."
+            }
+        };
+
+        function openKeywordModal(id) {
+            const data = modalData[id];
+            if (!data) return;
+
+            document.getElementById('modal-title').innerText = data.title;
+            
+            const subTag = document.getElementById('modal-sub-tag');
+            subTag.innerText = data.tag;
+            subTag.className = `text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${data.tagColor}`;
+
+            const badge = document.getElementById('modal-icon-badge');
+            badge.className = `w-12 h-12 rounded-2xl flex items-center justify-center font-black text-2xl shadow-lg ${data.iconBg}`;
+            badge.innerText = data.icon;
+
+            document.getElementById('modal-image-container').innerHTML = data.graphic;
+            document.getElementById('modal-desc').innerHTML = data.desc;
+
+            document.getElementById('keyword-modal').classList.remove('hidden');
+        }
+
+        function closeKeywordModal() {
+            document.getElementById('keyword-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
